@@ -1,38 +1,86 @@
 /* Roadmap card displayed on the hero right side — purely coded, no image dependency */
+
+/* Tag colour lookup — inline styles avoid unreliable arbitrary-value CSS generation */
+const tagInlineStyles = {
+  "completed":   { background: "rgba(125,155,118,0.2)",   color: "var(--brand-olive)" },
+  "in-progress": { background: "rgba(255,200,80,0.15)",   color: "#f0b429" },
+  "up-next":     { background: "rgba(255,255,255,0.07)",  color: "var(--brand-cream2)" },
+};
+
+/* Step indicator inline styles */
+function indicatorStyle(s, i) {
+  if (i === 1) return { background: "rgba(125,155,118,0.2)", border: "1.5px solid var(--brand-olive)", color: "var(--brand-olive)", boxShadow: "0 0 0 4px rgba(125,155,118,0.1)" };
+  if (s.done)  return { background: "var(--brand-olive)",     border: "1.5px solid var(--brand-olive)", color: "#fff" };
+  return         { background: "rgba(125,155,118,0.1)",        border: "1.5px solid rgba(125,155,118,0.3)", color: "var(--brand-cream2)" };
+}
+
 function scrollToSection(id) {
   const el = document.querySelector(id);
   if (el) el.scrollIntoView({ behavior: "smooth" });
 }
+
 function RoadmapCard() {
   const steps = [
-    { done: true,  label: "Python Fundamentals",   tag: "Completed",   progress: 100 },
+    { done: true,  label: "Python Fundamentals",    tag: "Completed",   progress: 100 },
     { done: true,  label: "Data Structures & Algo", tag: "In Progress", progress: 65  },
     { done: false, label: "Machine Learning Basics", tag: "Up Next",    progress: 0   },
   ];
 
   return (
-    <div className="roadmap-card">
+    <div
+      className="relative overflow-hidden w-full"
+      style={{
+        background: "var(--brand-charcoal3)",
+        border: "1px solid rgba(125,155,118,0.2)",
+        borderRadius: 20,
+        padding: 28,
+        maxWidth: 420,
+        boxShadow: "0 0 60px rgba(125,155,118,0.08), 0 20px 60px rgba(0,0,0,0.4)",
+      }}
+    >
+      {/* ::before pseudo-element handled in global.css — radial-gradient decoration */}
+
       {/* card header */}
-      <div className="roadmap-card-header">
-        <div className="roadmap-card-dot pulse" />
-        <span className="roadmap-card-label">Your AI Roadmap</span>
-        <span className="roadmap-card-badge">Live</span>
+      <div className="flex items-center gap-2" style={{ marginBottom: 20 }}>
+        <div
+          className="rounded-full animate-[pulse-dot_2s_infinite]"
+          style={{ width: 8, height: 8, background: "var(--brand-olive)", flexShrink: 0 }}
+        />
+        <span className="font-bold flex-1" style={{ fontSize: 14, color: "var(--brand-cream)" }}>Your AI Roadmap</span>
+        <span
+          className="font-semibold"
+          style={{ fontSize: 11, color: "var(--brand-olive)", background: "rgba(125,155,118,0.15)", padding: "3px 10px", borderRadius: 20, letterSpacing: "0.05em" }}
+        >
+          Live
+        </span>
       </div>
 
       {/* profile row */}
-      <div className="roadmap-profile">
-        <div className="roadmap-avatar">SK</div>
+      <div
+        className="flex items-center gap-3"
+        style={{ padding: 14, background: "rgba(0,0,0,0.25)", borderRadius: 12, marginBottom: 22 }}
+      >
+        <div
+          className="rounded-full flex items-center justify-center font-bold text-white"
+          style={{ width: 40, height: 40, background: "var(--brand-olive)", fontSize: 13, fontWeight: 700, flexShrink: 0 }}
+        >
+          SK
+        </div>
         <div>
-          <p className="roadmap-name">Skill Analysis Complete</p>
-          <p className="roadmap-meta">3 gaps identified · 12 courses curated</p>
+          <p className="font-semibold" style={{ fontSize: 13, color: "var(--brand-cream)", marginBottom: 2 }}>Skill Analysis Complete</p>
+          <p style={{ fontSize: 11, color: "var(--brand-cream2)" }}>3 gaps identified · 12 courses curated</p>
         </div>
       </div>
 
       {/* steps */}
-      <div className="roadmap-steps">
+      <div className="flex flex-col" style={{ marginBottom: 20 }}>
         {steps.map((s, i) => (
-          <div key={s.label} className="roadmap-step">
-            <div className={`roadmap-step-indicator ${s.done ? "done" : ""} ${i === 1 ? "active" : ""}`}>
+          <div key={s.label} className="flex items-start gap-3 relative" style={{ paddingBottom: i === steps.length - 1 ? 0 : 16 }}>
+            {/* step indicator */}
+            <div
+              className="rounded-full flex items-center justify-center font-bold relative"
+              style={{ width: 28, height: 28, fontSize: 11, flexShrink: 0, zIndex: 1, ...indicatorStyle(s, i) }}
+            >
               {s.done && i === 0 ? (
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                   <path d="M2 6l3 3 5-5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
@@ -41,15 +89,24 @@ function RoadmapCard() {
                 <span>{i + 1}</span>
               )}
             </div>
+            {/* connector line — calc(100% - 16px) in global.css */}
             {i < steps.length - 1 && <div className="roadmap-step-line" />}
-            <div className="roadmap-step-content">
-              <div className="roadmap-step-top">
-                <span className="roadmap-step-name">{s.label}</span>
-                <span className={`roadmap-step-tag tag-${s.tag.toLowerCase().replace(" ", "-")}`}>{s.tag}</span>
+            <div className="flex-1" style={{ paddingTop: 4 }}>
+              <div className="flex items-center justify-between gap-2" style={{ marginBottom: 6 }}>
+                <span className="font-semibold" style={{ fontSize: 12, color: "var(--brand-cream)" }}>{s.label}</span>
+                <span
+                  className="font-semibold whitespace-nowrap"
+                  style={{ fontSize: 10, padding: "2px 8px", borderRadius: 10, ...tagInlineStyles[s.tag.toLowerCase().replace(" ", "-")] }}
+                >
+                  {s.tag}
+                </span>
               </div>
               {s.progress > 0 && (
-                <div className="roadmap-progress-bar">
-                  <div className="roadmap-progress-fill" style={{ width: `${s.progress}%` }} />
+                <div className="rounded-full overflow-hidden" style={{ height: 4, background: "rgba(255,255,255,0.08)" }}>
+                  <div
+                    className="h-full rounded-full"
+                    style={{ width: `${s.progress}%`, background: "var(--brand-olive)", transition: "width 0.6s ease" }}
+                  />
                 </div>
               )}
             </div>
@@ -58,19 +115,27 @@ function RoadmapCard() {
       </div>
 
       {/* skill tags */}
-      <div className="roadmap-skill-tags">
+      <div className="flex flex-wrap" style={{ gap: 6, marginBottom: 18 }}>
         {["Python", "NumPy", "Pandas", "Scikit-learn", "SQL"].map((sk) => (
-          <span key={sk} className="roadmap-skill-pill">{sk}</span>
+          <span
+            key={sk}
+            className="font-medium"
+            style={{ fontSize: 11, color: "var(--brand-cream2)", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", padding: "3px 10px", borderRadius: 20 }}
+          >
+            {sk}
+          </span>
         ))}
       </div>
 
       {/* overall progress */}
-      <div className="roadmap-footer">
-        <span className="roadmap-footer-label">Overall Progress</span>
-        <span className="roadmap-footer-pct">38%</span>
+      <div className="flex justify-between items-center" style={{ marginBottom: 6 }}>
+        <span className="font-medium" style={{ fontSize: 11, color: "var(--brand-cream2)" }}>Overall Progress</span>
+        <span className="font-bold" style={{ fontSize: 13, color: "var(--brand-olive)" }}>38%</span>
       </div>
-      <div className="roadmap-overall-bar">
-        <div className="roadmap-overall-fill" style={{ width: "38%" }} />
+      <div className="overflow-hidden" style={{ height: 6, background: "rgba(255,255,255,0.08)", borderRadius: 6 }}>
+        <div
+          style={{ width: "38%", height: "100%", background: "linear-gradient(90deg, var(--brand-olive-dk), var(--brand-olive))", borderRadius: 6 }}
+        />
       </div>
     </div>
   );
@@ -78,36 +143,79 @@ function RoadmapCard() {
 
 export default function Hero() {
   return (
-    <section id="top" className="hero-section">
-      <div className="hero-inner">
+    <section
+      id="top"
+      className="min-h-screen flex items-center"
+      style={{ backgroundColor: "var(--brand-charcoal)", paddingTop: 90 }}
+    >
+      <div
+        className="grid grid-cols-2 items-center hero-inner"
+        style={{ maxWidth: 1200, margin: "0 auto", padding: "80px 40px", gap: 60 }}
+      >
         {/* ── LEFT COLUMN ── */}
-        <div className="hero-left">
-          <span className="hero-eyebrow">AI-Powered Career Intelligence</span>
-          <h1 className="hero-heading">
+        <div className="flex flex-col items-start gap-5 hero-left">
+          <span
+            className="inline-flex items-center gap-2 font-semibold uppercase"
+            style={{
+              fontSize: 12,
+              letterSpacing: "0.12em",
+              color: "var(--brand-olive)",
+              background: "rgba(125,155,118,0.12)",
+              padding: "6px 14px",
+              borderRadius: 30,
+              border: "1px solid rgba(125,155,118,0.25)",
+            }}
+          >
+            AI-Powered Career Intelligence
+          </span>
+          <h1
+            className="font-extrabold m-0 hero-heading"
+            style={{ fontSize: 56, lineHeight: 1.08, letterSpacing: "-1.5px", color: "var(--brand-cream)" }}
+          >
             Grow Your Skills.<br />
-            <span className="hero-heading-accent">Shape Your Future.</span>
+            <span style={{ color: "var(--brand-olive)" }}>Shape Your Future.</span>
           </h1>
-          <p className="hero-sub">
+          <p
+            className="hero-sub"
+            style={{ fontSize: 17, lineHeight: 1.7, color: "var(--brand-cream2)", maxWidth: 480 }}
+          >
             SkillSync helps you discover personalized learning paths and career
-            opportunities using AI — designed to match your goals and strengths.
+            opportunities using AI, designed to match your goals and strengths.
           </p>
-          <div className="hero-actions">
-            <button className="get-started" type="button">
+          <div className="flex items-center gap-4 flex-wrap hero-actions">
+            <button
+              type="button"
+              className="cursor-pointer border-none font-semibold text-white transition-all duration-200 hover:opacity-90 hover:-translate-y-px"
+              style={{
+                borderRadius: 40,
+                background: "var(--brand-olive)",
+                padding: "13px 32px",
+                fontSize: 15,
+                fontFamily: "'Montserrat', sans-serif",
+              }}
+            >
               Get Started Free
             </button>
             <button
-              className="hero-btn-ghost"
               type="button"
+              className="cursor-pointer bg-transparent font-medium transition-all duration-200 hover:opacity-90"
+              style={{
+                border: "1.5px solid rgba(125,155,118,0.4)",
+                borderRadius: 40,
+                padding: "12px 28px",
+                fontSize: 15,
+                fontFamily: "'Montserrat', sans-serif",
+                color: "var(--brand-cream2)",
+              }}
               onClick={() => scrollToSection("#how-it-works")}
             >
               See How It Works ↓
             </button>
           </div>
-
         </div>
 
         {/* ── RIGHT COLUMN ── */}
-        <div className="hero-right">
+        <div className="flex justify-center items-center">
           <RoadmapCard />
         </div>
       </div>

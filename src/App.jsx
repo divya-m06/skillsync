@@ -9,7 +9,7 @@ export default function App() {
   return (
     <>
       <Navbar />
-      <main>
+      <main style={{ paddingTop: 88 }}>
         <Hero />
         <HowItWorks />
         <Features />

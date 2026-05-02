@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import logoImage from "../../assets/images/SkillSync.png";
 
 const navLinks = [
@@ -19,31 +18,71 @@ function handleSmoothScroll(e, href) {
   }
 }
 
+/*
+  Navbar: Uses inline style props for pixel-exact values that Tailwind v4's scanner
+  cannot reliably generate from arbitrary-value classes (px-[50px], border-b-[8px], etc.).
+  Standard Tailwind classes are used for layout utilities (flex, fixed, w-full, etc.)
+  which are always in Tailwind's base set and don't require scanning.
+*/
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
-    <nav className={`myNav${scrolled ? " scrolled" : ""}`}>
+    <nav
+      className="flex justify-between items-center w-full fixed top-0 left-0 text-white"
+      style={{
+        padding: "16px 50px",
+        background: "rgba(20, 20, 20, 0.75)",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+        borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+        zIndex: 50,
+        width: "100%",
+      }}
+    >
       <a href="#top" aria-label="SkillSync home" onClick={(e) => handleSmoothScroll(e, "#top")}>
-        <img className="logo" src={logoImage} alt="SkillSync" />
+        <img
+          src={logoImage}
+          alt="SkillSync"
+          className="logo block object-contain"
+          style={{ width: 180, height: 56, objectPosition: "left center" }}
+        />
       </a>
 
-      <ul>
+      <ul className="flex items-center list-none" style={{ margin: 0, padding: 0 }}>
         {navLinks.map((link) => (
-          <li key={link.label}>
-            <a href={link.href} onClick={(e) => handleSmoothScroll(e, link.href)}>
+          <li key={link.label} style={{ display: "inline-block", padding: "0 16px" }}>
+            <a
+              href={link.href}
+              onClick={(e) => handleSmoothScroll(e, link.href)}
+              className="hover:text-[var(--brand-olive)] transition-colors duration-[250ms]"
+              style={{
+                fontFamily: "'Montserrat', sans-serif",
+                fontWeight: 500,
+                fontSize: 16,
+                color: "var(--brand-cream)",
+                textDecoration: "none",
+              }}
+            >
               {link.label}
             </a>
           </li>
         ))}
-        <li>
-          <button className="login" type="button">
+        <li style={{ display: "inline-block", padding: "0 16px" }}>
+          <button
+            type="button"
+            className="hover:opacity-90 transition-opacity duration-[250ms]"
+            style={{
+              backgroundColor: "var(--brand-olive)",
+              padding: "9px 26px",
+              border: "none",
+              borderRadius: 40,
+              cursor: "pointer",
+              fontFamily: "'Montserrat', sans-serif",
+              fontSize: 15,
+              fontWeight: 600,
+              color: "#fff",
+              whiteSpace: "nowrap",
+            }}
+          >
             Login / Signup
           </button>
         </li>

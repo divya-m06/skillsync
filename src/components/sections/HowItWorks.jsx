@@ -40,24 +40,58 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="how-it-works-section">
-      <div className="section-inner">
-        <p className="section-eyebrow">Simple. Smart. Effective.</p>
-        <h2 className="section-title">How SkillSync Works</h2>
-        <p className="section-sub">
+    <section
+      id="how-it-works"
+      style={{ backgroundColor: "var(--section-bg)", padding: "100px 0" }}
+    >
+      <div
+        className="text-center"
+        style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}
+      >
+        <p
+          className="block text-center font-semibold uppercase"
+          style={{ fontSize: 13, letterSpacing: "0.12em", color: "var(--brand-olive)", marginBottom: 12 }}
+        >
+          Simple. Smart. Effective.
+        </p>
+        <h2
+          className="font-extrabold text-center"
+          style={{ fontSize: 38, lineHeight: 1.15, letterSpacing: "-0.5px", color: "var(--brand-charcoal)", marginBottom: 14 }}
+        >
+          How SkillSync Works
+        </h2>
+        <p
+          style={{ fontSize: 17, color: "#666", maxWidth: 520, marginBottom: 56, lineHeight: 1.65, textAlign: "center", margin: "0 auto 56px" }}
+        >
           Three steps from where you are to where you want to be.
         </p>
 
-        <div className="steps-grid">
+        <div className="steps-grid grid grid-cols-3 relative" style={{ gap: 0, marginTop: 8 }}>
           {steps.map((step, i) => (
-            <div key={step.number} className="step-card">
-              {/* connector line between cards */}
-              {i < steps.length - 1 && <div className="step-connector" />}
-
-              <div className="step-number">{step.number}</div>
-              <div className="step-icon">{step.icon}</div>
-              <h3 className="step-title">{step.title}</h3>
-              <p className="step-desc">{step.desc}</p>
+            <div
+              key={step.number}
+              className="step-card relative text-center bg-white transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+              style={{
+                padding: "36px 32px",
+                border: "1px solid #ebebeb",
+                borderRadius: 16,
+                margin: "0 12px",
+              }}
+            >
+              <div
+                className="font-extrabold leading-none"
+                style={{ fontSize: 48, color: "rgba(125,155,118,0.15)", marginBottom: 16, letterSpacing: "-2px" }}
+              >
+                {step.number}
+              </div>
+              <div className="flex justify-center" style={{ marginBottom: 18 }}>{step.icon}</div>
+              <h3
+                className="font-bold"
+                style={{ fontSize: 17, color: "var(--brand-charcoal)", marginBottom: 12, lineHeight: 1.3 }}
+              >
+                {step.title}
+              </h3>
+              <p style={{ fontSize: 14, color: "#666", lineHeight: 1.65 }}>{step.desc}</p>
             </div>
           ))}
         </div>
