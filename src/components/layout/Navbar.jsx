@@ -1,9 +1,9 @@
 import logoImage from "../../assets/images/SkillSync.png";
 
 const navLinks = [
-  { href: "#top",        label: "Home" },
-  { href: "#dashboard",  label: "Dashboard" },
-  { href: "#roadmaps",   label: "My Roadmaps" },
+  { href: "#top",          label: "Home" },
+  { href: "#how-it-works", label: "How It Works" },
+  { href: "#features",     label: "Features" },
 ];
 
 function handleSmoothScroll(e, href) {
@@ -33,7 +33,7 @@ export default function Navbar() {
         background: "rgba(20, 20, 20, 0.75)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+        borderBottom: "6px solid #7d9b76",
         zIndex: 50,
         width: "100%",
       }}

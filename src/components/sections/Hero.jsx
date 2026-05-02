@@ -146,7 +146,7 @@ export default function Hero() {
     <section
       id="top"
       className="min-h-screen flex items-center"
-      style={{ backgroundColor: "var(--brand-charcoal)", paddingTop: 90 }}
+      style={{ backgroundColor: "var(--brand-charcoal)", paddingTop: 72, paddingBottom: 72 }}
     >
       <div
         className="grid grid-cols-2 items-center hero-inner"

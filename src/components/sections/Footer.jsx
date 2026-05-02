@@ -4,8 +4,6 @@ const footerLinks = [
   { href: "#top",          label: "Home" },
   { href: "#how-it-works", label: "How It Works" },
   { href: "#features",     label: "Features" },
-  { href: "#about",        label: "About" },
-  { href: "#contact",      label: "Contact" },
 ];
 
 function handleScroll(e, href) {
