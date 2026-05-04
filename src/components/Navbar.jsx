@@ -1,10 +1,5 @@
-import logoImage from "../../assets/images/SkillSync.png";
-
-const navLinks = [
-  { href: "#top",          label: "Home" },
-  { href: "#how-it-works", label: "How It Works" },
-  { href: "#features",     label: "Features" },
-];
+import { Link } from "react-router-dom"
+import logoImage from "../assets/images/SkillSync.png";
 
 function handleSmoothScroll(e, href) {
   if (href.startsWith("#")) {
@@ -24,7 +19,18 @@ function handleSmoothScroll(e, href) {
   Standard Tailwind classes are used for layout utilities (flex, fixed, w-full, etc.)
   which are always in Tailwind's base set and don't require scanning.
 */
-export default function Navbar() {
+export default function Navbar({ page = "landing" }) {
+  const navLinks = page === "dashboard"
+    ? [
+        { href: "/",         label: "Home",       isRoute: true },
+        { href: "/roadmaps", label: "My Roadmaps", isRoute: true },
+      ]
+    : [
+        { href: "#top",          label: "Home",         isRoute: false },
+        { href: "#how-it-works", label: "How It Works", isRoute: false },
+        { href: "#features",     label: "Features",     isRoute: false },
+      ];
+
   return (
     <nav
       className="flex justify-between items-center w-full fixed top-0 left-0 text-white"
@@ -50,20 +56,36 @@ export default function Navbar() {
       <ul className="flex items-center list-none" style={{ margin: 0, padding: 0 }}>
         {navLinks.map((link) => (
           <li key={link.label} style={{ display: "inline-block", padding: "0 16px" }}>
-            <a
-              href={link.href}
-              onClick={(e) => handleSmoothScroll(e, link.href)}
-              className="hover:text-[var(--brand-olive)] transition-colors duration-[250ms]"
-              style={{
-                fontFamily: "'Montserrat', sans-serif",
-                fontWeight: 500,
-                fontSize: 16,
-                color: "var(--brand-cream)",
-                textDecoration: "none",
-              }}
-            >
-              {link.label}
-            </a>
+            {link.isRoute ? (
+              <Link
+                to={link.href}
+                className="hover:text-[var(--brand-olive)] transition-colors duration-[250ms]"
+                style={{
+                  fontFamily: "'Montserrat', sans-serif",
+                  fontWeight: 500,
+                  fontSize: 16,
+                  color: "var(--brand-cream)",
+                  textDecoration: "none",
+                }}
+              >
+                {link.label}
+              </Link>
+            ) : (
+              <a
+                href={link.href}
+                onClick={(e) => handleSmoothScroll(e, link.href)}
+                className="hover:text-[var(--brand-olive)] transition-colors duration-[250ms]"
+                style={{
+                  fontFamily: "'Montserrat', sans-serif",
+                  fontWeight: 500,
+                  fontSize: 16,
+                  color: "var(--brand-cream)",
+                  textDecoration: "none",
+                }}
+              >
+                {link.label}
+              </a>
+            )}
           </li>
         ))}
         <li style={{ display: "inline-block", padding: "0 16px" }}>

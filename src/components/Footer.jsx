@@ -1,4 +1,4 @@
-import logoImage from "../../assets/images/SkillSync.png";
+import logoImage from "../assets/images/SkillSync.png";
 
 const footerLinks = [
   { href: "#top",          label: "Home" },

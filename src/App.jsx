@@ -1,21 +1,12 @@
-import Navbar     from "./components/layout/Navbar";
-import Hero        from "./components/sections/Hero";
-import HowItWorks  from "./components/sections/HowItWorks";
-import Features    from "./components/sections/Features";
-import CTABanner   from "./components/sections/CTABanner";
-import Footer      from "./components/sections/Footer";
+import { Routes, Route } from "react-router-dom"
+import Landing from "./pages/Landing"
+import Dashboard from "./pages/Dashboard"
 
 export default function App() {
   return (
-    <>
-      <Navbar />
-      <main style={{ paddingTop: 0}}>
-        <Hero />
-        <HowItWorks />
-        <Features />
-        <CTABanner />
-      </main>
-      <Footer />
-    </>
-  );
+    <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+    </Routes>
+  )
 }
