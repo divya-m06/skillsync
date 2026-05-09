@@ -88,26 +88,72 @@ export default function Navbar({ page = "landing" }) {
             )}
           </li>
         ))}
-        <li style={{ display: "inline-block", padding: "0 16px" }}>
-          <button
-            type="button"
-            className="hover:opacity-90 transition-opacity duration-[250ms]"
-            style={{
-              backgroundColor: "var(--brand-olive)",
-              padding: "9px 26px",
-              border: "none",
-              borderRadius: 40,
-              cursor: "pointer",
-              fontFamily: "'Montserrat', sans-serif",
-              fontSize: 15,
-              fontWeight: 600,
-              color: "#fff",
-              whiteSpace: "nowrap",
-            }}
-          >
-            Login / Signup
-          </button>
-        </li>
+        {page === "dashboard" ? (
+          <>
+            {/* Sign In — text link */}
+            <li style={{ display: "inline-block", padding: "0 12px" }}>
+              <Link
+                to="/login"
+                className="hover:text-[var(--brand-olive)] transition-colors duration-[250ms]"
+                style={{
+                  fontFamily: "'Montserrat', sans-serif",
+                  fontWeight: 500,
+                  fontSize: 15,
+                  color: "var(--brand-cream)",
+                  textDecoration: "none",
+                }}
+              >
+                Sign In
+              </Link>
+            </li>
+
+            {/* Get Started — pill button */}
+            <li style={{ display: "inline-block", padding: "0 4px 0 8px" }}>
+              <Link
+                to="/register"
+                style={{
+                  display: "inline-block",
+                  backgroundColor: "var(--brand-olive)",
+                  padding: "9px 24px",
+                  borderRadius: 40,
+                  fontFamily: "'Montserrat', sans-serif",
+                  fontSize: 15,
+                  fontWeight: 600,
+                  color: "#fff",
+                  textDecoration: "none",
+                  whiteSpace: "nowrap",
+                  transition: "background-color 0.25s ease",
+                }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = "var(--brand-olive-dk)"}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = "var(--brand-olive)"}
+              >
+                Get Started
+              </Link>
+            </li>
+          </>
+        ) : (
+          /* Landing — existing Login / Signup button unchanged */
+          <li style={{ display: "inline-block", padding: "0 16px" }}>
+            <button
+              type="button"
+              className="hover:opacity-90 transition-opacity duration-[250ms]"
+              style={{
+                backgroundColor: "var(--brand-olive)",
+                padding: "9px 26px",
+                border: "none",
+                borderRadius: 40,
+                cursor: "pointer",
+                fontFamily: "'Montserrat', sans-serif",
+                fontSize: 15,
+                fontWeight: 600,
+                color: "#fff",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Login / Signup
+            </button>
+          </li>
+        )}
       </ul>
     </nav>
   );

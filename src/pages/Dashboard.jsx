@@ -1,5 +1,10 @@
 import { useState } from "react"
-import Navbar from "../components/Navbar"
+import Navbar          from "../components/Navbar"
+import SkillTagInput   from "../components/SkillTagInput"
+import GapVisualizer   from "../components/GapVisualizer"
+import CourseCards     from "../components/CourseCard"
+import RoadmapTimeline from "../components/RoadmapTimeline"
+import api             from "../services/api"
 
 const ROLES = [
   "Data Scientist",
@@ -16,222 +21,7 @@ const ROLES = [
 
 
 
-function SkillTagInput({ skills, setSkills }) {
-  const [input, setInput] = useState("")
 
-  function handleKeyDown(e) {
-    if (e.key === "Enter" && input.trim()) {
-      e.preventDefault()
-      const newSkill = input.trim()
-      if (!skills.map(s => s.toLowerCase()).includes(newSkill.toLowerCase())) {
-        setSkills([...skills, newSkill])
-      }
-      setInput("")
-    }
-    if (e.key === "Backspace" && !input && skills.length > 0) {
-      setSkills(skills.slice(0, -1))
-    }
-  }
-
-  function removeSkill(skill) {
-    setSkills(skills.filter(s => s !== skill))
-  }
-
-  return (
-    <div
-      style={{
-        display: "flex", flexWrap: "wrap", gap: 8,
-        padding: "10px 12px",
-        border: "1.5px solid #e0e0d8",
-        borderRadius: 10,
-        background: "#fafaf8",
-        minHeight: 52, alignItems: "center", cursor: "text",
-      }}
-      onClick={e => e.currentTarget.querySelector("input").focus()}
-    >
-      {skills.map(skill => (
-        <span
-          key={skill}
-          style={{
-            background: "rgba(125,155,118,0.15)",
-            border: "1px solid rgba(125,155,118,0.3)",
-            color: "var(--brand-olive-dk)",
-            padding: "4px 12px", borderRadius: 20,
-            fontSize: 13, fontWeight: 600,
-            display: "flex", alignItems: "center", gap: 6,
-          }}
-        >
-          {skill}
-          <span
-            onClick={() => removeSkill(skill)}
-            style={{ cursor: "pointer", opacity: 0.5, fontSize: 15, lineHeight: 1 }}
-          >
-            ×
-          </span>
-        </span>
-      ))}
-      <input
-        value={input}
-        onChange={e => setInput(e.target.value)}
-        onKeyDown={handleKeyDown}
-        placeholder={skills.length === 0 ? "Type a skill and press Enter..." : "Add more..."}
-        style={{
-          border: "none", outline: "none", background: "transparent",
-          fontSize: 14, fontFamily: "'Montserrat', sans-serif",
-          flex: 1, minWidth: 160, color: "var(--brand-charcoal)",
-        }}
-      />
-    </div>
-  )
-}
-
-function GapVisualizer({ matched, missing }) {
-  return (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 32 }}>
-      <div
-        style={{
-          background: "white", borderRadius: 12, padding: "24px",
-          border: "1px solid #ebebeb",
-        }}
-      >
-        <p style={{
-          fontSize: 12, fontWeight: 700, textTransform: "uppercase",
-          letterSpacing: "0.08em", color: "var(--brand-olive-dk)", marginBottom: 14,
-        }}>
-          Skills You Have
-        </p>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-          {matched.length === 0 ? (
-            <p style={{ fontSize: 13, color: "#999" }}>None matched</p>
-          ) : matched.map(skill => (
-            <span key={skill} style={{
-              background: "rgba(125,155,118,0.12)",
-              border: "1px solid rgba(125,155,118,0.25)",
-              color: "var(--brand-olive-dk)",
-              padding: "4px 12px", borderRadius: 20,
-              fontSize: 13, fontWeight: 600,
-            }}>
-              {skill}
-            </span>
-          ))}
-        </div>
-      </div>
-      <div
-        style={{
-          background: "white", borderRadius: 12, padding: "24px",
-          border: "1px solid #ebebeb",
-        }}
-      >
-        <p style={{
-          fontSize: 12, fontWeight: 700, textTransform: "uppercase",
-          letterSpacing: "0.08em", color: "#c1121f", marginBottom: 14,
-        }}>
-          Skills You Are Missing
-        </p>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-          {missing.length === 0 ? (
-            <p style={{ fontSize: 13, color: "#999" }}>No gaps found</p>
-          ) : missing.map(skill => (
-            <span key={skill} style={{
-              background: "rgba(193,18,31,0.07)",
-              border: "1px solid rgba(193,18,31,0.2)",
-              color: "#c1121f",
-              padding: "4px 12px", borderRadius: 20,
-              fontSize: 13, fontWeight: 600,
-            }}>
-              {skill}
-            </span>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function RoadmapTimeline({ roadmap }) {
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 32 }}>
-      {roadmap.map((week) => (
-        <div
-          key={week.week}
-          style={{
-            background: "white", borderRadius: 12, padding: "24px 28px",
-            border: "1px solid #ebebeb",
-            display: "flex", gap: 24, alignItems: "flex-start",
-          }}
-        >
-          <div style={{
-            background: "var(--brand-charcoal)", color: "var(--brand-cream)",
-            borderRadius: 8, padding: "6px 14px",
-            fontSize: 12, fontWeight: 800,
-            whiteSpace: "nowrap", flexShrink: 0,
-            letterSpacing: "0.04em",
-          }}>
-            Week {week.week}
-          </div>
-          <div style={{ flex: 1 }}>
-            <p style={{ fontSize: 15, fontWeight: 700, color: "var(--brand-charcoal)", marginBottom: 4 }}>
-              {week.focus_skill}
-            </p>
-            <p style={{ fontSize: 13, color: "#666", lineHeight: 1.6, marginBottom: 10 }}>
-              {week.why_it_matters}
-            </p>
-            <ul style={{ paddingLeft: 16, margin: 0 }}>
-              {week.action_items.map((item, i) => (
-                <li key={i} style={{ fontSize: 13, color: "#555", lineHeight: 1.7 }}>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-function CourseCards({ courses }) {
-  return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, marginBottom: 32 }}>
-      {courses.map((course, i) => (
-        <div
-          key={i}
-          style={{
-            background: "white", borderRadius: 12, padding: "20px 22px",
-            border: "1px solid #ebebeb",
-            display: "flex", flexDirection: "column", gap: 8,
-          }}
-        >
-          <span style={{
-            fontSize: 10, fontWeight: 700, textTransform: "uppercase",
-            letterSpacing: "0.08em", color: "var(--brand-olive)",
-            background: "rgba(125,155,118,0.1)",
-            padding: "3px 10px", borderRadius: 20,
-            alignSelf: "flex-start",
-          }}>
-            {course.platform}
-          </span>
-          <p style={{ fontSize: 14, fontWeight: 700, color: "var(--brand-charcoal)", lineHeight: 1.4 }}>
-            {course.title}
-          </p>
-          {course.url && (
-            <a
-              href={course.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                fontSize: 13, color: "var(--brand-olive-dk)", fontWeight: 600,
-                textDecoration: "none", marginTop: "auto",
-              }}
-            >
-              View Course
-            </a>
-          )}
-        </div>
-      ))}
-    </div>
-  )
-}
 
 export default function Dashboard() {
   const [role, setRole] = useState("")
@@ -249,18 +39,12 @@ export default function Dashboard() {
     setError(null)
     setResult(null)
     try {
-      const res = await fetch("http://localhost:8000/api/dashboard", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          target_role: role,
-          user_skills: skills,
-          experience_level: experience.toLowerCase(),
-        }),
+      const res = await api.post("/api/dashboard", {
+        target_role: role,
+        user_skills: skills,
+        experience_level: experience.toLowerCase(),
       })
-      if (!res.ok) throw new Error("API error")
-      const data = await res.json()
-      setResult(data)
+      setResult(res.data)
     } catch (err) {
       setError("Something went wrong. Make sure the backend is running.")
     } finally {
@@ -290,7 +74,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <Navbar />
+      <Navbar page="dashboard" />
       <div style={{ paddingTop: 60, minHeight: "100vh", background: "var(--section-bg)" }}>
 
         {/* Page header */}
