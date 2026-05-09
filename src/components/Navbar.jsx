@@ -90,8 +90,8 @@ export default function Navbar({ page = "landing" }) {
         ))}
         {page === "dashboard" ? (
           <>
-            {/* Sign In — text link */}
-            <li style={{ display: "inline-block", padding: "0 12px" }}>
+            {/* Sign In */}
+            <li style={{ display: "inline-block", padding: "0 16px" }}>
               <Link
                 to="/login"
                 className="hover:text-[var(--brand-olive)] transition-colors duration-[250ms]"
@@ -106,38 +106,15 @@ export default function Navbar({ page = "landing" }) {
                 Sign In
               </Link>
             </li>
-
-            {/* Get Started — pill button */}
-            <li style={{ display: "inline-block", padding: "0 4px 0 8px" }}>
-              <Link
-                to="/register"
-                style={{
-                  display: "inline-block",
-                  backgroundColor: "var(--brand-olive)",
-                  padding: "9px 24px",
-                  borderRadius: 40,
-                  fontFamily: "'Montserrat', sans-serif",
-                  fontSize: 15,
-                  fontWeight: 600,
-                  color: "#fff",
-                  textDecoration: "none",
-                  whiteSpace: "nowrap",
-                  transition: "background-color 0.25s ease",
-                }}
-                onMouseEnter={e => e.currentTarget.style.backgroundColor = "var(--brand-olive-dk)"}
-                onMouseLeave={e => e.currentTarget.style.backgroundColor = "var(--brand-olive)"}
-              >
-                Get Started
-              </Link>
-            </li>
           </>
         ) : (
-          /* Landing — existing Login / Signup button unchanged */
+          /* Landing — Login / Signup button linking to /login */
           <li style={{ display: "inline-block", padding: "0 16px" }}>
-            <button
-              type="button"
+            <Link
+              to="/login"
               className="hover:opacity-90 transition-opacity duration-[250ms]"
               style={{
+                display: "inline-block",
                 backgroundColor: "var(--brand-olive)",
                 padding: "9px 26px",
                 border: "none",
@@ -147,11 +124,12 @@ export default function Navbar({ page = "landing" }) {
                 fontSize: 15,
                 fontWeight: 600,
                 color: "#fff",
+                textDecoration: "none",
                 whiteSpace: "nowrap",
               }}
             >
               Login / Signup
-            </button>
+            </Link>
           </li>
         )}
       </ul>
